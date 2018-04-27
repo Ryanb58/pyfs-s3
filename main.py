@@ -1,20 +1,24 @@
+from fs import open_fs
 from fs.tempfs import TempFS
-from fs_s3fs import S3FS
+# from fs_s3fs import S3FS
 
 
 # Generate temp files to upload:
 tempfs = TempFS()
 for num in range(0, 100):
     with tempfs.open('file' + str(num), 'w') as fi:
-        fi.write("I AM A FILE" * num)
+        fi.write("I AM A FILE\n" * num)
 
 
 # Connect to S3
-s3fs = S3FS(
-    'default',
-    aws_access_key_id="minio",
-    aws_secret_access_key="minio123",
-    endpoint_url="http://localhost:9009")
+# s3fs = S3FS(
+#     'default',
+#     aws_access_key_id="minio",
+#     aws_secret_access_key="minio123",
+#     endpoint_url="http://localhost:9009")
+
+s3fs = open_fs(
+    's3://minio:minio123@default/?endpoint_url=http://localhost:9009')
 
 # Print some info for us to use.
 count = len(s3fs.listdir('/'))
